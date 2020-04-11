@@ -15,7 +15,7 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import UserService from './services/UserService'
+import UserService from './services/UserService.js'
 
 export default {
   name: 'app',
@@ -27,9 +27,6 @@ export default {
       console.log(22222)
       const user = await UserService.getUserById()
       console.log(user)
-    },
-    test(){
-      console.log('测试')
     }
   }
 }
