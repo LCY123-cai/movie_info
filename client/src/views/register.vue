@@ -10,22 +10,25 @@
             <el-form-item prop="email" label="邮箱">
                 <el-input v-model="registerForm.email"></el-input>
             </el-form-item>
-            <el-form-item prop="password" label="密码">
+            <el-form-item prop="password" label="密码" type="password">
                 <el-input v-model="registerForm.password"></el-input>
             </el-form-item>
-            <el-form-item prop="comparePassword" label="确认密码">
+            <el-form-item prop="comparePassword" label="确认密码" type="password">
                 <el-input v-model="registerForm.comparePassword"></el-input>
             </el-form-item>
-            <el-button type="primary" style="width:100%" native-type="submit" @click="register">注册</el-button>
-            <div class="register-info">如果已注册账号请<router-link :to="{name: login}">点击登录</router-link></div>
+            <el-button type="primary" style="width:100%" native-type="submit" :loading="loading" @click="register">注册</el-button>
+            <div class="register-info">如果已注册账号请<router-link :to="{name: 'login'}">点击登录</router-link></div>
       </el-form>
   </div>
 </template>
 
 <script>
+import UserService from '../services/UserService'
+
 export default {
     data () {
         return {
+            loading: false,
             registerForm: {
                 email: '',
                 password: '',
@@ -53,10 +56,21 @@ export default {
     },
     methods: {
         register () {
-           this.$refs.registerForm.validate((valid) => {
-             console.log(valid)
+           this.$refs.registerForm.validate(async (valid) => {
              if (valid) {
-                // TODO: register.api
+                this.loading = true
+                try {
+                    const response = await UserService.register(
+                        {
+                            email: this.registerForm.email,
+                            password: this.registerForm.password
+                        }
+                    )
+                    console.log(222222222222)
+                    console.log(response)
+                } catch (error) {
+                    console.log(error)
+                }
              }
            })
         }

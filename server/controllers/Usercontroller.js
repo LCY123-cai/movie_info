@@ -14,12 +14,13 @@ module.exports = {
   async register (req, res) {
     try {
       const user = await User.create(req.body)
-      res.status(201).send({
+      res.send({
+        code: 200,
         user,
         token: tokenSign(user)
       })
     } catch (error) {
-      res.status(400).send({
+      res.status(200).send({
         code: 400,
         error: '该邮箱已经注册'
       })
