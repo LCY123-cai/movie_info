@@ -1,22 +1,23 @@
 <template>
   <div class="register-container">
       <el-form
-          ref="registerFrom"
+          ref="registerForm"
           lobel-width="150px"
           class="register-form"
           :model="registerForm"
           :rules="registerRules"
         >
+            <div class="register-error">{{ this.error }}</div>
             <el-form-item prop="email" label="邮箱">
                 <el-input v-model="registerForm.email"></el-input>
             </el-form-item>
-            <el-form-item prop="password" label="密码" type="password">
-                <el-input v-model="registerForm.password"></el-input>
+            <el-form-item prop="password" label="密码">
+                <el-input v-model="registerForm.password" type="password"></el-input>
             </el-form-item>
-            <el-form-item prop="comparePassword" label="确认密码" type="password">
-                <el-input v-model="registerForm.comparePassword"></el-input>
+            <el-form-item prop="comparePassword" label="确认密码">
+                <el-input v-model="registerForm.comparePassword" type="password"></el-input>
             </el-form-item>
-            <el-button type="primary" style="width:100%" native-type="submit" :loading="loading" @click="register">注册</el-button>
+            <el-button type="primary" style="width:100%" native-type="submit" :loading="loading" @click.prevent="register">注册</el-button>
             <div class="register-info">如果已注册账号请<router-link :to="{name: 'login'}">点击登录</router-link></div>
       </el-form>
   </div>
@@ -29,6 +30,7 @@ export default {
     data () {
         return {
             loading: false,
+            error: '',
             registerForm: {
                 email: '',
                 password: '',
@@ -59,6 +61,7 @@ export default {
            this.$refs.registerForm.validate(async (valid) => {
              if (valid) {
                 this.loading = true
+                this.error = ''
                 try {
                     const response = await UserService.register(
                         {
@@ -66,10 +69,21 @@ export default {
                             password: this.registerForm.password
                         }
                     )
-                    console.log(222222222222)
-                    console.log(response)
+                    if (response.data.code !== 200) {
+                        this.error = response.data.error
+                    } else {
+                        this.$store.dispatch('setToken', response.data.token)
+                        this.$store.dispatch('setUser', response.data.user)
+                        this.$router.push('/')
+                    }
+                    this.loading = false
                 } catch (error) {
-                    console.log(error)
+                    if (error.response.data.error) {
+                        this.error = error.response.data.error
+                    } else {
+                        this.error = '注册失败，请稍后再试'
+                    }
+                    this.loading = false
                 }
              }
            })
@@ -96,6 +110,9 @@ export default {
             font-size: 0.9rem;
             margin-top: 10px;
             color: #909399;
+        }
+        .register-error {
+            color: #F56C6C;
         }
     }
 }

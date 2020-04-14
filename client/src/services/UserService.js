@@ -6,6 +6,16 @@ export default {
         return response.data
     },
     register (data) {
-        return request.post('/users', data)
+        return request.post(
+            '/users',
+            data
+        )
+    },
+    async login (data) {
+        const response = await request.post(
+            '/users/login',
+            data
+        )
+        return response
     }
 }

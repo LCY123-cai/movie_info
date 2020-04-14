@@ -14,15 +14,24 @@ module.exports = {
   async register (req, res) {
     try {
       const user = await User.create(req.body)
-      res.send({
+      res.status(201).send({
         code: 200,
-        user,
+        user: {
+          email: user.email,
+          id: user.id
+        },
         token: tokenSign(user)
       })
     } catch (error) {
-      res.status(200).send({
+      const err = []
+      if (error.errors) {
+        error.errors.forEach(validateError => {
+          err.push(validateError.message)
+        })
+      }
+      res.status(400).send({
         code: 400,
-        error: '该邮箱已经注册'
+        error: err.join('<br/>')
       })
     }
   },
@@ -95,8 +104,17 @@ module.exports = {
       const isValidPassword = user.comparePassword(req.body.password)
       if (isValidPassword) {
         res.send({
-          user: user.toJSON(),
+          code: 200,
+          user: {
+            email: user.email,
+            id: user.id
+          },
           token: tokenSign(user)
+        })
+      } else {
+        res.status(403).send({
+          code: 403,
+          error: '用户名或密码错误'
         })
       }
     } catch (error) {
