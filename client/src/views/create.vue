@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div>
     <base-box type="primary" title="新增信息">
       <el-form ref="movie-form" :model="form" :rules="rules" label-width="120px">
@@ -89,7 +89,7 @@ export default {
   methods: {
     submit (formName) {
       this.loading = true
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].valisdate((valid) => {
         if (valid) {
           // TODO: 调用接口服务，将数据发送给后台进行保存
           this.$message({
