@@ -1,7 +1,7 @@
 const UserController = require('./controllers/Usercontroller')
 const MovieController = require('./controllers/MovieController')
 const AuthenticatePolicy = require('./policies/AuthenticatePolicy')
-
+// 后台接口请求搭建
 module.exports = (app) => {
   app.post('/users/login', UserController.login)
   app.get('/users/:id',
