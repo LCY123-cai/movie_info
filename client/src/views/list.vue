@@ -2,10 +2,10 @@
   <base-box type="primary" title="电影">
     <template v-slot:title-addon>
       <div class="filter">
-        <label class="active">最新</label>
-        <label>高分</label>
-        <label>动作</label>
-        <label>剧情</label>
+        <label @click="orderBy('rating', $event)">最新</label>
+        <label @click="orderBy('rating', $event)">高分</label>
+        <label @click="filterByGenre('动作')">动作</label>
+        <label @click="filterByGenre('剧情')">剧情</label>
       </div>
       <div
         class="text-success"
@@ -29,30 +29,43 @@
 </template>
 
 <script>
+import MovieService from 'services/MovieService'
 export default {
   data () {
     return {
       movies: []
     }
   },
-  created () {
-    // TODO: 调用接口服务获取数据列表
-    this.movies = [
-      {
-        id: 1,
-        name: '哪吒之魔童降世',
-        poster: 'https://imgs.aixifan.com/o_1dflgds791p2otdr93e11qf1bmr.jpg',
-        rating: 8.6
-      },
-      {
-        id: 2,
-        name: '绿皮书',
-        poster: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=304162534,2965962807&fm=26&gp=0.jpg',
-        rating: 8.6
+  async created () {
+    try {
+      const response = await MovieService.getAll()
+      this.movies = response.data.movies
+    } catch (error) {
+      this.$message.error(`[${error.response.status}], 数据查询异常请稍后再试`)
+    }
+  },
+  methods: {
+    async orderBy (field, event) {
+      // console.log(event.target.className)
+      const query = `orderby=${field}`
+      try {
+        const response = await MovieService.getAll(query)
+        this.movies = response.data.movies
+      } catch (error) {
+        this.$message.error(`[${error.response.status}], 数据查询异常请稍后再试`)
       }
-    ]
+    },
+    async filterByGenre (genre, event) {
+      // console.log(event.target.className)
+      const query = `genre=${genre}`
+      try {
+        const response = await MovieService.getAll(query)
+        this.movies = response.data.movies
+      } catch (error) {
+        this.$message.error(`[${error.response.status}], 数据查询异常请稍后再试`)
+      }
+    }
   }
-
 }
 </script>
 

@@ -22,4 +22,5 @@ module.exports = (app) => {
   )
   app.get('/movies/:id', MovieController.getByid)
   app.get('/movies', MovieController.getAll)
+  app.delete('/movies/:id', MovieController.delete)
 }

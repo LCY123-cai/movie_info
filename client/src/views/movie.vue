@@ -2,7 +2,7 @@
 <el-container>
   <el-header height="50px" class="bg-primary">
     <div class="header">
-      <h1>vue+++++</h1>
+      <h1 @click="$router.push('/')">vue+++++</h1>
       <div>
         <template v-if="!$store.state.isUserLogin">
           <span @click="$router.push({name: 'login'})">登录</span>&nbsp;|
@@ -55,6 +55,7 @@ export default {
   h1 {
     margin: 2px 0;
     margin-right: auto;
+    cursor: pointer;
   }
   span {
     cursor: pointer;

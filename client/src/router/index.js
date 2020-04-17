@@ -42,7 +42,7 @@ const router = new VueRouter({
       path: '/movies',
       component: movie,
       children: [
-        { path: 'create', name: 'movie-create', component: create, meta: { auth: true } },
+        { path: 'create', name: 'movie-create', alias: 'edit', component: create, meta: { auth: true } },
         { path: 'detail/:id', name: 'movie-detail', component: detail },
         { path: 'list', name: 'movie-list', component: list }
       ]
