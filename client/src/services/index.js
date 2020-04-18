@@ -5,7 +5,8 @@ import 'nprogress/nprogress.css'
 import store from '../store'
 
 const request = axios.create({
-  baseURL: '/api',
+  // baseURL: '/api',
+  baseURL: process.env.DOME_ENV === 'development' ? '/api' : 'http://localhost:3000',
   headers: {
     showLoading: true
     // Authorization: `Bearer ${store.state.token}`

@@ -2,10 +2,11 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const { sequelize } = require('./models')
-
+const cors = require('cors')
 const app = express()
 app.use(bodyParser.json())
 app.use(morgan('combined'))
+app.use(cors())
 
 require('./router')(app)
 
